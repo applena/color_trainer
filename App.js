@@ -9,6 +9,7 @@ export default function App() {
   const [indexes, setIndexes] = useState([]);
   const [hexColors, setHexColors] = useState([]);
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
+  console.log('rendering APP', hexColors)
 
   useEffect(() => {
     let tempArray = [];
@@ -19,16 +20,19 @@ export default function App() {
     }
     setIndexes(tempArray);
 
-    const hexArray = tempArray.map(arr => arr[1]);
+    const hexArray = tempArray.map(index => allColors[index][1]);
     setHexColors(hexArray);
+    console.log({ hexArray })
   }, [])
 
   return (
     <View style={styles.container}>
       <Text>Train yourself to recognize the names of colors</Text>
-      <Text style={styles.colorBox}></Text>
+      <View style={styles.colorBox}>
+        <Text id="banana" style={{ backgroundColor: hexColors[0] ? hexColors[0] : '#eee' }}>.</Text>
+      </View>
       <StatusBar style="auto" />
-    </View>
+    </View >
   );
 }
 
@@ -40,8 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   colorBox: {
-    height: "20px",
-    width: "20px",
-    color: hexColors[0]
+    height: "50px",
+    width: "50px",
   }
 });
