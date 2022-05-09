@@ -29,6 +29,7 @@ export default function App() {
     setChosenColor(allColors[tempArray[chosenColorIndex]]);
   }, [])
 
+  console.log(allColors[indexes[0]] ? allColors[indexes[0]][0] : '')
   return (
     <View style={styles.container}>
       {!gameMode &&
@@ -56,16 +57,24 @@ export default function App() {
               <Text>Which color is: {chosenColor[0]}</Text>
             </div>
             :
-            <div>
+            <Card>
               <Text>What is the NAME of this COLOR</Text>
               <Text style={{ backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}>.</Text>
-              <ul>
-                <li>{allColors[indexes[0]] ? allColors[indexes[0]][0] : ""}</li>
-                <li>{allColors[indexes[0]] ? allColors[indexes[1]][0] : ""}</li>
-                <li>{allColors[indexes[0]] ? allColors[indexes[2]][0] : ""}</li>
-                <li>{allColors[indexes[0]] ? allColors[indexes[3]][0] : ""}</li>
-              </ul>
-            </div>
+              {/* <ul> */}
+              {indexes.map(i => (
+                <ListItem key={i}>
+                  <ListItem.Title>
+                    {allColors[i] ? allColors[i][0] : ""}
+                  </ListItem.Title>
+                </ListItem>
+                // <li>
+                //   {allColors[i] ? allColors[i][0] : ""}
+                // </li>
+              ))}
+              {/* </ul> */}
+
+
+            </Card>
           }
         </View>
       }
