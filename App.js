@@ -4,11 +4,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import colorsAF from './assets/colorsAF.json';
 import colorsGM from './assets/colorsGM.json';
 import colorsNZ from './assets/colorsNZ.json';
+import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 export default function App() {
   const [indexes, setIndexes] = useState([]);
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
   const [chosenColor, setChosenColor] = useState({});
+  const [colorMode, setColorMode] = useState(false);
+  const [displayColor, setDisplayColor] = useState(false);
+  const [gameMode, setGameMode] = useState(false);
+
+  console.log({ displayColor, gameMode })
 
   useEffect(() => {
     let tempArray = [];
@@ -25,14 +31,44 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Train yourself to recognize the names of colors</Text>
-      <View style={styles.colorBox}>
-        <Text id="banana" style={{ backgroundColor: allColors[indexes[0]] ? allColors[indexes[0]][1] : '#eee' }}>.</Text>
-        <Text id="banana" style={{ backgroundColor: allColors[indexes[1]] ? allColors[indexes[1]][1] : '#eee' }}>.</Text>
-        <Text id="banana" style={{ backgroundColor: allColors[indexes[2]] ? allColors[indexes[2]][1] : '#eee' }}>.</Text>
-        <Text id="banana" style={{ backgroundColor: allColors[indexes[3]] ? allColors[indexes[3]][1] : '#eee' }}>.</Text>
-        <Text>Which color is: {chosenColor[0]}</Text>
-      </View>
+      {!gameMode &&
+        <View>
+          <Text>Train yourself to recognize the names of colors</Text>
+
+          <Card onClick={() => setGameMode(true)}>
+            <Card.Title>Choose the correct NAME</Card.Title>
+          </Card>
+
+          <Card onClick={() => { setGameMode(true); setDisplayColor(true); }}>
+            <Card.Title>Choose the correct COLOR</Card.Title>
+          </Card>
+        </View>
+      }
+
+      {gameMode &&
+        <View style={styles.colorBox}>
+          {displayColor ?
+            <div>
+              <Text id="banana" style={{ backgroundColor: allColors[indexes[0]] ? allColors[indexes[0]][1] : '#eee' }}>.</Text>
+              <Text id="banana" style={{ backgroundColor: allColors[indexes[1]] ? allColors[indexes[1]][1] : '#eee' }}>.</Text>
+              <Text id="banana" style={{ backgroundColor: allColors[indexes[2]] ? allColors[indexes[2]][1] : '#eee' }}>.</Text>
+              <Text id="banana" style={{ backgroundColor: allColors[indexes[3]] ? allColors[indexes[3]][1] : '#eee' }}>.</Text>
+              <Text>Which color is: {chosenColor[0]}</Text>
+            </div>
+            :
+            <div>
+              <Text>What is the NAME of this COLOR</Text>
+              <Text style={{ backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}>.</Text>
+              <ul>
+                <li>{allColors[indexes[0]] ? allColors[indexes[0]][0] : ""}</li>
+                <li>{allColors[indexes[0]] ? allColors[indexes[1]][0] : ""}</li>
+                <li>{allColors[indexes[0]] ? allColors[indexes[2]][0] : ""}</li>
+                <li>{allColors[indexes[0]] ? allColors[indexes[3]][0] : ""}</li>
+              </ul>
+            </div>
+          }
+        </View>
+      }
       <StatusBar style="auto" />
     </View >
   );
@@ -46,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   colorBox: {
-    height: "50px",
-    width: "50px",
+    height: "200px",
+    width: "200px",
   }
 });
