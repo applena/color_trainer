@@ -7,9 +7,8 @@ import colorsNZ from './assets/colorsNZ.json';
 
 export default function App() {
   const [indexes, setIndexes] = useState([]);
-  const [hexColors, setHexColors] = useState([]);
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
-  console.log('rendering APP', hexColors)
+  const [chosenColor, setChosenColor] = useState({});
 
   useEffect(() => {
     let tempArray = [];
@@ -20,16 +19,19 @@ export default function App() {
     }
     setIndexes(tempArray);
 
-    const hexArray = tempArray.map(index => allColors[index][1]);
-    setHexColors(hexArray);
-    console.log({ hexArray })
+    let chosenColorIndex = Math.floor(Math.random() * tempArray.length);
+    setChosenColor(allColors[tempArray[chosenColorIndex]]);
   }, [])
 
   return (
     <View style={styles.container}>
       <Text>Train yourself to recognize the names of colors</Text>
       <View style={styles.colorBox}>
-        <Text id="banana" style={{ backgroundColor: hexColors[0] ? hexColors[0] : '#eee' }}>.</Text>
+        <Text id="banana" style={{ backgroundColor: allColors[indexes[0]] ? allColors[indexes[0]][1] : '#eee' }}>.</Text>
+        <Text id="banana" style={{ backgroundColor: allColors[indexes[1]] ? allColors[indexes[1]][1] : '#eee' }}>.</Text>
+        <Text id="banana" style={{ backgroundColor: allColors[indexes[2]] ? allColors[indexes[2]][1] : '#eee' }}>.</Text>
+        <Text id="banana" style={{ backgroundColor: allColors[indexes[3]] ? allColors[indexes[3]][1] : '#eee' }}>.</Text>
+        <Text>Which color is: {chosenColor[0]}</Text>
       </View>
       <StatusBar style="auto" />
     </View >
