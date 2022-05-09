@@ -49,31 +49,25 @@ export default function App() {
       {gameMode &&
         <View style={styles.colorBox}>
           {displayColor ?
-            <div>
-              <Text id="banana" style={{ backgroundColor: allColors[indexes[0]] ? allColors[indexes[0]][1] : '#eee' }}>.</Text>
-              <Text id="banana" style={{ backgroundColor: allColors[indexes[1]] ? allColors[indexes[1]][1] : '#eee' }}>.</Text>
-              <Text id="banana" style={{ backgroundColor: allColors[indexes[2]] ? allColors[indexes[2]][1] : '#eee' }}>.</Text>
-              <Text id="banana" style={{ backgroundColor: allColors[indexes[3]] ? allColors[indexes[3]][1] : '#eee' }}>.</Text>
-              <Text>Which color is: {chosenColor[0]}</Text>
-            </div>
+            <Card>
+              {indexes.map(i => (
+                <ListItem key={i}>
+                  <Text style={{ backgroundColor: allColors[i] ? allColors[i][1] : '#eee' }}>.</Text>
+                </ListItem>
+              ))}
+              <Card.Title>Which color is: {chosenColor[0]}</Card.Title>
+            </Card>
             :
             <Card>
-              <Text>What is the NAME of this COLOR</Text>
+              <Card.Title>What is the NAME of this COLOR</Card.Title>
               <Text style={{ backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}>.</Text>
-              {/* <ul> */}
               {indexes.map(i => (
                 <ListItem key={i}>
                   <ListItem.Title>
                     {allColors[i] ? allColors[i][0] : ""}
                   </ListItem.Title>
                 </ListItem>
-                // <li>
-                //   {allColors[i] ? allColors[i][0] : ""}
-                // </li>
               ))}
-              {/* </ul> */}
-
-
             </Card>
           }
         </View>
