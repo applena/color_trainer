@@ -47,12 +47,15 @@ export default function App() {
       }
 
       {gameMode &&
-        <View style={styles.colorBox}>
+        <View>
           {displayColor ?
             <Card>
               {indexes.map(i => (
-                <ListItem key={i}>
-                  <Text style={{ backgroundColor: allColors[i] ? allColors[i][1] : '#eee' }}>.</Text>
+                <ListItem style={styles.colorBox} key={i}>
+                  <Text style={{
+                    ...styles.colorBox, width: '200px',
+                    backgroundColor: allColors[i] ? allColors[i][1] : '#eee'
+                  }}>.</Text>
                 </ListItem>
               ))}
               <Card.Title>Which color is: {chosenColor[0]}</Card.Title>
@@ -85,7 +88,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   colorBox: {
-    height: "200px",
+    // height: "200px",
     width: "200px",
+    display: 'block'
   }
 });
