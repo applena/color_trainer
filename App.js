@@ -4,13 +4,18 @@ import { StyleSheet, Text, View } from 'react-native';
 import colorsAF from './assets/colorsAF.json';
 import colorsGM from './assets/colorsGM.json';
 import colorsNZ from './assets/colorsNZ.json';
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import { Card, ListItem, Button, Icon } from 'react-native-elements';
+import style from './App.module.css';
+
+console.log({ style })
+// import AppStyles from './App.scss';
+
+// console.log({ AppStyles })
 
 export default function App() {
   const [indexes, setIndexes] = useState([]);
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
   const [chosenColor, setChosenColor] = useState({});
-  const [colorMode, setColorMode] = useState(false);
   const [displayColor, setDisplayColor] = useState(false);
   const [gameMode, setGameMode] = useState(false);
 
@@ -64,6 +69,7 @@ export default function App() {
             <Card>
               <Card.Title>What is the NAME of this COLOR</Card.Title>
               <Text style={{ backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}>.</Text>
+              {/* <div style={style.color}>TEST</div> */}
               {indexes.map(i => (
                 <ListItem key={i}>
                   <ListItem.Title>
