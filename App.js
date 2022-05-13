@@ -18,10 +18,16 @@ export default function App() {
   const [chosenColor, setChosenColor] = useState({});
   const [displayColor, setDisplayColor] = useState(false);
   const [gameMode, setGameMode] = useState(false);
+  const [score, setScore] = useState(0);
+  const [status, setStatus] = useState('incorrect');
 
   console.log({ displayColor, gameMode })
 
   useEffect(() => {
+    getNewColor();
+  }, [])
+
+  const getNewColor = () => {
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
       let index = Math.floor(Math.random() * allColors.length);
@@ -32,9 +38,21 @@ export default function App() {
 
     let chosenColorIndex = Math.floor(Math.random() * tempArray.length);
     setChosenColor(allColors[tempArray[chosenColorIndex]]);
-  }, [])
+    setStatus('');
+  }
 
-  console.log(allColors[indexes[0]] ? allColors[indexes[0]][0] : '')
+  const checkAnswer = (answer) => {
+    console.log({ answer, chosenColor });
+    if (answer[0] === chosenColor[0]) {
+      console.log('correct');
+      setStatus('correct');
+      setTimeout(function () { getNewColor(); }, 1000);
+    } else {
+      console.log('wrong');
+      setStatus('incorrect');
+    }
+  }
+
   return (
     <View style={styles.container}>
       {!gameMode &&
@@ -53,6 +71,7 @@ export default function App() {
 
       {gameMode &&
         <View>
+          <Text>{status}</Text>
           {displayColor ?
             <Card>
               {indexes.map(i => (
@@ -72,7 +91,7 @@ export default function App() {
               {/* <div style={style.color}>TEST</div> */}
               {indexes.map(i => (
                 <ListItem key={i}>
-                  <ListItem.Title>
+                  <ListItem.Title onClick={() => checkAnswer(allColors[i])}>
                     {allColors[i] ? allColors[i][0] : ""}
                   </ListItem.Title>
                 </ListItem>
