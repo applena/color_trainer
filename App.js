@@ -83,12 +83,16 @@ export default function App() {
           {displayColor ?
             <Card>
               {indexes.map(i => (
-                <ListItem style={styles.colorBox} key={i}>
+                <TouchableHighlight
+                  key={i}
+                  onClick={() => checkAnswer(allColors[i])}
+                  onPress={() => checkAnswer(allColors[i])}
+                >
                   <Text style={{
                     ...styles.colorBox, width: '200px',
                     backgroundColor: allColors[i] ? allColors[i][1] : '#eee'
-                  }}>.</Text>
-                </ListItem>
+                  }}>.........................................</Text>
+                </TouchableHighlight>
               ))}
               <Card.Title>Which color is: {chosenColor[0]}</Card.Title>
             </Card>
@@ -99,7 +103,8 @@ export default function App() {
               {indexes.map(i => (
                 <ListItem key={i}>
                   <TouchableHighlight
-                    onClick={() => checkAnswer(allColors[i])} onPress={() => checkAnswer(allColors[i])}
+                    onClick={() => checkAnswer(allColors[i])}
+                    onPress={() => checkAnswer(allColors[i])}
                   >
                     <Text>{allColors[i] ? allColors[i][0] : ""}</Text>
                   </TouchableHighlight>
