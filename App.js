@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
 import colorsAF from './assets/colorsAF.json';
 import colorsGM from './assets/colorsGM.json';
 import colorsNZ from './assets/colorsNZ.json';
-import { Card, ListItem, Button, Icon } from 'react-native-elements';
+import { Card, ListItem } from 'react-native-elements';
 import style from './App.module.css';
 
 console.log({ style })
@@ -59,12 +59,20 @@ export default function App() {
         <View>
           <Text>Train yourself to recognize the names of colors</Text>
 
-          <Card onClick={() => setGameMode(true)} onPress={() => setGameMode(true)}>
-            <Card.Title>Choose the correct NAME</Card.Title>
+          <Card>
+            <Button
+              onClick={() => setGameMode(true)} onPress={() => setGameMode(true)}
+              title='Choose the correct NAME'
+            >
+            </Button>
           </Card>
 
-          <Card onClick={() => { setGameMode(true); setDisplayColor(true); }} onPress={() => { setGameMode(true); setDisplayColor(true); }}>
-            <Card.Title>Choose the correct COLOR</Card.Title>
+          <Card>
+            <Button
+              onClick={() => { setGameMode(true); setDisplayColor(true); }} onPress={() => { setGameMode(true); setDisplayColor(true); }}
+              title="Choose the correct COLOR"
+            >
+            </Button>
           </Card>
         </View>
       }
@@ -88,12 +96,13 @@ export default function App() {
             <Card>
               <Card.Title>What is the NAME of this COLOR</Card.Title>
               <Text style={{ backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}>.</Text>
-              {/* <div style={style.color}>TEST</div> */}
               {indexes.map(i => (
                 <ListItem key={i}>
-                  <ListItem.Title onClick={() => checkAnswer(allColors[i])} onPress={() => checkAnswer(allColors[i])}>
-                    {allColors[i] ? allColors[i][0] : ""}
-                  </ListItem.Title>
+                  <TouchableHighlight
+                    onClick={() => checkAnswer(allColors[i])} onPress={() => checkAnswer(allColors[i])}
+                  >
+                    <Text>{allColors[i] ? allColors[i][0] : ""}</Text>
+                  </TouchableHighlight>
                 </ListItem>
               ))}
             </Card>
