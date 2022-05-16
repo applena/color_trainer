@@ -59,11 +59,11 @@ export default function App() {
         <View>
           <Text>Train yourself to recognize the names of colors</Text>
 
-          <Card onPress={() => setGameMode(true)}>
+          <Card onClick={() => setGameMode(true)} onPress={() => setGameMode(true)}>
             <Card.Title>Choose the correct NAME</Card.Title>
           </Card>
 
-          <Card onPress={() => { setGameMode(true); setDisplayColor(true); }}>
+          <Card onClick={() => { setGameMode(true); setDisplayColor(true); }} onPress={() => { setGameMode(true); setDisplayColor(true); }}>
             <Card.Title>Choose the correct COLOR</Card.Title>
           </Card>
         </View>
@@ -91,7 +91,7 @@ export default function App() {
               {/* <div style={style.color}>TEST</div> */}
               {indexes.map(i => (
                 <ListItem key={i}>
-                  <ListItem.Title onPress={() => checkAnswer(allColors[i])}>
+                  <ListItem.Title onClick={() => checkAnswer(allColors[i])} onPress={() => checkAnswer(allColors[i])}>
                     {allColors[i] ? allColors[i][0] : ""}
                   </ListItem.Title>
                 </ListItem>
