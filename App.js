@@ -25,6 +25,7 @@ export default function App() {
 
   useEffect(() => {
     getNewColor();
+    getScore();
   }, [])
 
   const getNewColor = () => {
@@ -64,6 +65,18 @@ export default function App() {
       console.log('successfully stored score', stringScore)
     } catch (e) {
       console.error('ERROR saving score', e);
+    }
+  }
+
+  const getScore = async () => {
+    try {
+      const value = await AsyncStorage.getItem('score')
+      if (value !== null) {
+        let tempScore = JSON.parse(value);
+        setScore(tempScore);
+      }
+    } catch (e) {
+      console.error('ERROR getting score', e);
     }
   }
 
