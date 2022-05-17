@@ -6,6 +6,7 @@ import colorsGM from './assets/colorsGM.json';
 import colorsNZ from './assets/colorsNZ.json';
 import { Card, ListItem } from 'react-native-elements';
 import style from './App.module.css';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 console.log({ style })
 // import AppStyles from './App.scss';
@@ -20,14 +21,14 @@ export default function App() {
   const [gameMode, setGameMode] = useState(false);
   const [score, setScore] = useState(0);
   const [status, setStatus] = useState('incorrect');
-
-  console.log({ displayColor, gameMode })
+  const [firstGuess, setFirstGuess] = useState(true);
 
   useEffect(() => {
     getNewColor();
   }, [])
 
   const getNewColor = () => {
+    setFirstGuess(true);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
       let index = Math.floor(Math.random() * allColors.length);
@@ -42,14 +43,27 @@ export default function App() {
   }
 
   const checkAnswer = (answer) => {
-    console.log({ answer, chosenColor });
     if (answer[0] === chosenColor[0]) {
-      console.log('correct');
+      if (firstGuess) {
+        let tempScore = score + 1;
+        setScore(tempScore);
+        saveScore(tempScore);
+      }
       setStatus('correct');
       setTimeout(function () { getNewColor(); }, 1000);
     } else {
-      console.log('wrong');
+      setFirstGuess(false);
       setStatus('incorrect');
+    }
+  }
+
+  const saveScore = async (playerScore) => {
+    try {
+      const stringScore = JSON.stringify(playerScore);
+      await AsyncStorage.setItem('score', stringScore);
+      console.log('successfully stored score', stringScore)
+    } catch (e) {
+      console.error('ERROR saving score', e);
     }
   }
 
@@ -69,7 +83,16 @@ export default function App() {
 
           <Card>
             <Button
-              onClick={() => { setGameMode(true); setDisplayColor(true); }} onPress={() => { setGameMode(true); setDisplayColor(true); }}
+              onClick={() => {
+                setGameMode(true);
+                setDisplayColor(true);
+              }
+              }
+              onPress={() => {
+                setGameMode(true);
+                setDisplayColor(true);
+              }
+              }
               title="Choose the correct COLOR"
             >
             </Button>
@@ -79,9 +102,9 @@ export default function App() {
 
       {gameMode &&
         <View>
-          <Text>{status}</Text>
+          <Text>{status} Your Score is: {score}</Text>
           {displayColor ?
-            <Card>
+            <Card containerStyle={{ display: 'flex' }}>
               {indexes.map(i => (
                 <TouchableHighlight
                   key={i}
@@ -89,9 +112,9 @@ export default function App() {
                   onPress={() => checkAnswer(allColors[i])}
                 >
                   <Text style={{
-                    ...styles.colorBox, width: '200px',
+                    width: '100px', height: '100px', display: 'inline',
                     backgroundColor: allColors[i] ? allColors[i][1] : '#eee'
-                  }}>.........................................</Text>
+                  }}></Text>
                 </TouchableHighlight>
               ))}
               <Card.Title>Which color is: {chosenColor[0]}</Card.Title>
@@ -99,7 +122,7 @@ export default function App() {
             :
             <Card>
               <Card.Title>What is the NAME of this COLOR</Card.Title>
-              <Text style={{ backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}>.</Text>
+              <Text style={{ width: '100px', height: '100px', display: 'inline', alignItems: 'center', backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}></Text>
               {indexes.map(i => (
                 <ListItem key={i}>
                   <TouchableHighlight
@@ -125,10 +148,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  colorBox: {
-    // height: "200px",
-    width: "200px",
-    display: 'block'
   }
 });
