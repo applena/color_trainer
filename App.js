@@ -148,6 +148,20 @@ export default function App() {
               ))}
             </Card>
           }
+          <Card>
+            <Button
+              onClick={() => {
+                displayColor ? setDisplayColor(false) : setDisplayColor(true);
+              }
+              }
+              onPress={() => {
+                displayColor ? setDisplayColor(false) : setDisplayColor(true);
+              }
+              }
+              title="Switch Games"
+            >
+            </Button>
+          </Card>
         </View>
       }
       <StatusBar style="auto" />
