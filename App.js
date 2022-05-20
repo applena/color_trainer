@@ -5,23 +5,20 @@ import colorsAF from './assets/colorsAF.json';
 import colorsGM from './assets/colorsGM.json';
 import colorsNZ from './assets/colorsNZ.json';
 import { Card, ListItem } from 'react-native-elements';
-import style from './App.module.css';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-console.log({ style })
-// import AppStyles from './App.scss';
-
-// console.log({ AppStyles })
+import DropdownLevelPicker from './components/DropdownLevelPicker';
 
 export default function App() {
-  const [indexes, setIndexes] = useState([]);
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
+  const [colorArray, setColorArray] = useState([...colorsAF, ...colorsGM, ...colorsNZ]);
+  const [indexes, setIndexes] = useState([]);
   const [chosenColor, setChosenColor] = useState({});
   const [displayColor, setDisplayColor] = useState(false);
   const [gameMode, setGameMode] = useState(false);
   const [score, setScore] = useState(0);
   const [status, setStatus] = useState('incorrect');
   const [firstGuess, setFirstGuess] = useState(true);
+  const [level, setLevel] = useState('Beginner');
 
   useEffect(() => {
     getNewColor();
@@ -38,9 +35,44 @@ export default function App() {
     }
     setIndexes(tempArray);
 
-    let chosenColorIndex = Math.floor(Math.random() * tempArray.length);
-    setChosenColor(allColors[tempArray[chosenColorIndex]]);
+    pickChosenColor(tempArray);
+  }
+
+  const setNewLevel = (level) => {
+    if (level === 'Expert') {
+      setExpertLevel();
+    } else {
+      getNewColor();
+    }
+    setLevel(level);
+  }
+
+  const pickChosenColor = (array) => {
+    let chosenColorIndex = Math.floor(Math.random() * array.length);
+    setChosenColor(colorArray[array[chosenColorIndex]]);
     setStatus('');
+  }
+
+  const setExpertLevel = () => {
+    const sortedArray = allColors.sort((a, b) => a[2] > b[2] ? 1 : -1);
+    const groupedSortedArray = [];
+    let counter = 0;
+    let tempArr = [];
+
+    sortedArray.forEach(color => {
+      tempArr.push(color);
+      counter++;
+      if (counter === 50) {
+        groupedSortedArray.push(tempArr);
+        counter = 0;
+        tempArr = [];
+      }
+    })
+
+    let index = Math.floor(Math.random() * groupedSortedArray.length);
+    // TODO: make allColors a variable
+    setColorArray(groupedSortedArray[index]);
+    pickChosenColor(index)
   }
 
   const checkAnswer = (answer) => {
@@ -85,7 +117,6 @@ export default function App() {
       {!gameMode &&
         <View>
           <Text>Train yourself to recognize the names of colors</Text>
-
           <Card>
             <Button
               onClick={() => setGameMode(true)} onPress={() => setGameMode(true)}
@@ -116,13 +147,16 @@ export default function App() {
       {gameMode &&
         <View>
           <Text>{status} Your Score is: {score}</Text>
+          <DropdownLevelPicker
+            setNewLevel={setNewLevel}
+          />
           {displayColor ?
             <Card containerStyle={{ display: 'flex' }}>
               {indexes.map(i => (
                 <TouchableHighlight
                   key={i}
-                  onClick={() => checkAnswer(allColors[i])}
-                  onPress={() => checkAnswer(allColors[i])}
+                  onClick={() => checkAnswer(colorArray[i])}
+                  onPress={() => checkAnswer(colorArray[i])}
                 >
                   <Text style={{
                     width: '100px', height: '100px', display: 'inline',
