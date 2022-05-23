@@ -49,7 +49,7 @@ export default function App() {
     if (level === 'Expert') {
       setExpertLevel();
     } else {
-      getNewColor();
+      getNewColor(colorArray);
     }
     setLevel(level);
   }
@@ -92,7 +92,7 @@ export default function App() {
         saveScore(tempScore);
       }
       setStatus('correct');
-      setTimeout(function () { getNewColor(); }, 1000);
+      setTimeout(function () { getNewColor(colorArray); }, 1000);
     } else {
       setFirstGuess(false);
       setStatus('incorrect');
