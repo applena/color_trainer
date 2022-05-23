@@ -25,17 +25,21 @@ export default function App() {
     getScore();
   }, [])
 
-  const getNewColor = () => {
+  const getNewColor = (array = allColors) => {
     setFirstGuess(true);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
-      let index = Math.floor(Math.random() * allColors.length);
+      let index = Math.floor(Math.random() * array.length);
       if (tempArray.includes(index)) { i--; continue; }
       tempArray.push(index);
     }
     setIndexes(tempArray);
 
-    pickChosenColor(tempArray);
+    const pickedColors = tempArray.map(index => {
+      return [array[index]];
+    })
+
+    pickChosenColor(pickedColors);
   }
 
   const setNewLevel = (level) => {
@@ -48,8 +52,9 @@ export default function App() {
   }
 
   const pickChosenColor = (array) => {
+    // console.log('in pickChosenColor', array)
     let chosenColorIndex = Math.floor(Math.random() * array.length);
-    setChosenColor(colorArray[array[chosenColorIndex]]);
+    setChosenColor(array[chosenColorIndex]);
     setStatus('');
   }
 
@@ -59,6 +64,7 @@ export default function App() {
     let counter = 0;
     let tempArr = [];
 
+    // group colors in shades of 50
     sortedArray.forEach(color => {
       tempArr.push(color);
       counter++;
@@ -70,9 +76,8 @@ export default function App() {
     })
 
     let index = Math.floor(Math.random() * groupedSortedArray.length);
-    // TODO: make allColors a variable
     setColorArray(groupedSortedArray[index]);
-    pickChosenColor(index)
+    getNewColor(groupedSortedArray[index]);
   }
 
   const checkAnswer = (answer) => {
@@ -169,7 +174,7 @@ export default function App() {
             :
             <Card>
               <Card.Title>What is the NAME of this COLOR</Card.Title>
-              <Text style={{ width: '100px', height: '100px', display: 'inline', alignItems: 'center', backgroundColor: chosenColor[1] ? chosenColor[1] : '#fff' }}></Text>
+              <Text style={{ width: '100px', height: '100px', display: 'inline', alignItems: 'center', backgroundColor: chosenColor[1] ? chosenColor[1] : 'ff0000' }}></Text>
               {indexes.map(i => (
                 <ListItem key={i}>
                   <TouchableHighlight
