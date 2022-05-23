@@ -12,7 +12,7 @@ export default function App() {
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
   const [colorArray, setColorArray] = useState([...colorsAF, ...colorsGM, ...colorsNZ]);
   const [indexes, setIndexes] = useState([]);
-  const [chosenColor, setChosenColor] = useState({});
+  const [chosenColor, setChosenColor] = useState([]);
   const [displayColor, setDisplayColor] = useState(false);
   const [gameMode, setGameMode] = useState(false);
   const [score, setScore] = useState(0);
@@ -26,6 +26,7 @@ export default function App() {
   }, [])
 
   const getNewColor = (array = allColors) => {
+    console.log('getNewColor', { array })
     setFirstGuess(true);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
@@ -36,8 +37,10 @@ export default function App() {
     setIndexes(tempArray);
 
     const pickedColors = tempArray.map(index => {
-      return [array[index]];
+      return array[index];
     })
+
+    console.log({ pickedColors })
 
     pickChosenColor(pickedColors);
   }
@@ -54,6 +57,7 @@ export default function App() {
   const pickChosenColor = (array) => {
     // console.log('in pickChosenColor', array)
     let chosenColorIndex = Math.floor(Math.random() * array.length);
+    // console.log('chosen color', array[chosenColorIndex]);
     setChosenColor(array[chosenColorIndex]);
     setStatus('');
   }
@@ -117,6 +121,8 @@ export default function App() {
     }
   }
 
+  // console.log({ chosenColor })
+
   return (
     <View style={styles.container}>
       {!gameMode &&
@@ -165,7 +171,7 @@ export default function App() {
                 >
                   <Text style={{
                     width: '100px', height: '100px', display: 'inline',
-                    backgroundColor: allColors[i] ? allColors[i][1] : '#eee'
+                    backgroundColor: colorArray[i] ? colorArray[i][1] : '#eee'
                   }}></Text>
                 </TouchableHighlight>
               ))}
@@ -178,10 +184,10 @@ export default function App() {
               {indexes.map(i => (
                 <ListItem key={i}>
                   <TouchableHighlight
-                    onClick={() => checkAnswer(allColors[i])}
-                    onPress={() => checkAnswer(allColors[i])}
+                    onClick={() => checkAnswer(colorArray[i])}
+                    onPress={() => checkAnswer(colorArray[i])}
                   >
-                    <Text>{allColors[i] ? allColors[i][0] : ""}</Text>
+                    <Text>{colorArray[i] ? colorArray[i][0] : ""}</Text>
                   </TouchableHighlight>
                 </ListItem>
               ))}
