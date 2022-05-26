@@ -92,7 +92,7 @@ export default function App() {
     } else {
       setStatus('incorrect');
     }
-    setTimeout(function () { getNewColor(colorArray); }, 1000);
+    setTimeout(function () { getNewColor(colorArray); }, 2000);
   }
 
   const saveScore = async (playerScore) => {

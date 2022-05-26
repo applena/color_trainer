@@ -3,7 +3,6 @@ import { Card, ListItem } from 'react-native-elements';
 import { Text, TouchableHighlight } from 'react-native';
 
 function GuessNameGame(props) {
-  console.log('status', props.status, { props })
 
   const checkAnswer = (arr) => props.checkAnswer(arr);
 
@@ -14,8 +13,10 @@ function GuessNameGame(props) {
       {props.indexes.map(i => (
         <ListItem
           key={i}
-          // containerStyle={{ backgroundColor: props.status === 'correct' ? '#00ff00' : props.status === 'incorrect' ? '#8e1600' : '#fff' }}
-          containerStyle={{ backgroundColor: props.status === false ? '#fff' : props.chosenColor[1] === props.colorArray[i][1] ? '#00ff00' : '#8e1600' }}
+          containerStyle={{
+            backgroundColor: props.status === false ? '#fff' : props.chosenColor[1] === props.colorArray[i][1] ? '#028a0f' : '#8e1600',
+            borderRadius: '10px'
+          }}
         >
           <TouchableHighlight
             onClick={() => checkAnswer(props.colorArray[i])}

@@ -8,18 +8,22 @@ function GuessColorGame(props) {
 
   return (
     <Card containerStyle={{ display: 'flex' }}>
-      {props.indexes.map(i => (
+      {!props.status ? props.indexes.map(i => (
         <TouchableHighlight
           key={i}
           onClick={() => checkAnswer(props.colorArray[i])}
           onPress={() => checkAnswer(props.colorArray[i])}
+          style={{ width: '100px', height: '100px' }}
         >
           <Text style={{
-            width: '100px', height: '100px', display: 'inline',
+            width: '100px', height: '100px',
             backgroundColor: props.colorArray[i] ? props.colorArray[i][1] : '#eee'
           }}></Text>
         </TouchableHighlight>
-      ))}
+      ))
+        :
+        <div style={{ backgroundColor: props.chosenColor[1], height: '100px', width: '100px' }}></div>
+      }
       <Card.Title>Which color is: {props.chosenColor[0]}</Card.Title>
     </Card>
   )
