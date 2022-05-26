@@ -19,8 +19,8 @@ export default function App() {
   const [gameMode, setGameMode] = useState(false);
   const [score, setScore] = useState(0);
   const [status, setStatus] = useState('incorrect');
-  const [firstGuess, setFirstGuess] = useState(true);
   const [level, setLevel] = useState('Beginner');
+  const [backgroundColor, setBackgroundColor] = useState('#fff');
 
   useEffect(() => {
     getNewColor();
@@ -29,7 +29,6 @@ export default function App() {
 
   const getNewColor = (array = allColors) => {
     // console.log('getNewColor', { array })
-    setFirstGuess(true);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
       let index = Math.floor(Math.random() * array.length);
@@ -88,17 +87,16 @@ export default function App() {
 
   const checkAnswer = (answer) => {
     if (answer[0] === chosenColor[0]) {
-      if (firstGuess) {
-        let tempScore = score + 1;
-        setScore(tempScore);
-        saveScore(tempScore);
-      }
+      let tempScore = score + 1;
+      setScore(tempScore);
+      saveScore(tempScore);
+      setBackgroundColor('#00ff00');
       setStatus('correct');
-      setTimeout(function () { getNewColor(colorArray); }, 1000);
     } else {
-      setFirstGuess(false);
       setStatus('incorrect');
+      setBackgroundColor('#8e1600');
     }
+    // setTimeout(function () { getNewColor(colorArray); }, 1000);
   }
 
   const saveScore = async (playerScore) => {
@@ -167,6 +165,7 @@ export default function App() {
               colorArray={colorArray}
               chosenColor={chosenColor}
               checkAnswer={checkAnswer}
+              status={status}
             />
             :
             <GuessNameGame
@@ -174,6 +173,7 @@ export default function App() {
               chosenColor={chosenColor}
               checkAnswer={checkAnswer}
               colorArray={colorArray}
+              status={status}
             />
           }
           <Card>
