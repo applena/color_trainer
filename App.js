@@ -8,7 +8,7 @@ import { Card } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropdownLevelPicker from './components/DropdownLevelPicker';
 import GuessColorGame from './components/GuessColorGame';
-import GuessNameGame from './components/guessNameGame';
+import GuessNameGame from './components/GuessNameGame';
 
 export default function App() {
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
@@ -18,9 +18,7 @@ export default function App() {
   const [displayColor, setDisplayColor] = useState(false);
   const [gameMode, setGameMode] = useState(false);
   const [score, setScore] = useState(0);
-  const [status, setStatus] = useState('incorrect');
-  const [level, setLevel] = useState('Beginner');
-  const [backgroundColor, setBackgroundColor] = useState('#fff');
+  const [status, setStatus] = useState(false);
 
   useEffect(() => {
     getNewColor();
@@ -29,6 +27,7 @@ export default function App() {
 
   const getNewColor = (array = allColors) => {
     // console.log('getNewColor', { array })
+    setStatus(false);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
       let index = Math.floor(Math.random() * array.length);
@@ -52,7 +51,6 @@ export default function App() {
     } else {
       getNewColor(colorArray);
     }
-    setLevel(level);
   }
 
   const pickChosenColor = (array) => {
@@ -60,7 +58,7 @@ export default function App() {
     let chosenColorIndex = Math.floor(Math.random() * array.length);
     // console.log('chosen color', array[chosenColorIndex]);
     setChosenColor(array[chosenColorIndex]);
-    setStatus('');
+    setStatus(false);
   }
 
   const setExpertLevel = () => {
@@ -90,11 +88,9 @@ export default function App() {
       let tempScore = score + 1;
       setScore(tempScore);
       saveScore(tempScore);
-      setBackgroundColor('#00ff00');
       setStatus('correct');
     } else {
       setStatus('incorrect');
-      setBackgroundColor('#8e1600');
     }
     // setTimeout(function () { getNewColor(colorArray); }, 1000);
   }
