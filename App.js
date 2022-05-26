@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import colorsAF from './assets/colorsAF.json';
 import colorsGM from './assets/colorsGM.json';
 import colorsNZ from './assets/colorsNZ.json';
-import { Card, ListItem } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropdownLevelPicker from './components/DropdownLevelPicker';
+import GuessColorGame from './components/GuessColorGame';
+import GuessNameGame from './components/guessNameGame';
 
 export default function App() {
   const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
@@ -26,7 +28,7 @@ export default function App() {
   }, [])
 
   const getNewColor = (array = allColors) => {
-    console.log('getNewColor', { array })
+    // console.log('getNewColor', { array })
     setFirstGuess(true);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
@@ -40,7 +42,7 @@ export default function App() {
       return array[index];
     })
 
-    console.log({ pickedColors })
+    // console.log({ pickedColors })
 
     pickChosenColor(pickedColors);
   }
@@ -121,8 +123,6 @@ export default function App() {
     }
   }
 
-  // console.log({ chosenColor })
-
   return (
     <View style={styles.container}>
       {!gameMode &&
@@ -157,41 +157,24 @@ export default function App() {
 
       {gameMode &&
         <View>
-          <Text>{status} Your Score is: {score}</Text>
+          <Text>{status} Score: {score}</Text>
           <DropdownLevelPicker
             setNewLevel={setNewLevel}
           />
           {displayColor ?
-            <Card containerStyle={{ display: 'flex' }}>
-              {indexes.map(i => (
-                <TouchableHighlight
-                  key={i}
-                  onClick={() => checkAnswer(colorArray[i])}
-                  onPress={() => checkAnswer(colorArray[i])}
-                >
-                  <Text style={{
-                    width: '100px', height: '100px', display: 'inline',
-                    backgroundColor: colorArray[i] ? colorArray[i][1] : '#eee'
-                  }}></Text>
-                </TouchableHighlight>
-              ))}
-              <Card.Title>Which color is: {chosenColor[0]}</Card.Title>
-            </Card>
+            <GuessColorGame
+              indexes={indexes}
+              colorArray={colorArray}
+              chosenColor={chosenColor}
+              checkAnswer={checkAnswer}
+            />
             :
-            <Card>
-              <Card.Title>What is the NAME of this COLOR</Card.Title>
-              <Text style={{ width: '100px', height: '100px', display: 'inline', alignItems: 'center', backgroundColor: chosenColor[1] ? chosenColor[1] : 'ff0000' }}></Text>
-              {indexes.map(i => (
-                <ListItem key={i}>
-                  <TouchableHighlight
-                    onClick={() => checkAnswer(colorArray[i])}
-                    onPress={() => checkAnswer(colorArray[i])}
-                  >
-                    <Text>{colorArray[i] ? colorArray[i][0] : ""}</Text>
-                  </TouchableHighlight>
-                </ListItem>
-              ))}
-            </Card>
+            <GuessNameGame
+              indexes={indexes}
+              chosenColor={chosenColor}
+              checkAnswer={checkAnswer}
+              colorArray={colorArray}
+            />
           }
           <Card>
             <Button
