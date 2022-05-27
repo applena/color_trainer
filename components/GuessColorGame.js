@@ -15,14 +15,14 @@ function GuessColorGame(props) {
           onPress={() => checkAnswer(props.colorArray[i])}
           style={{ width: '100px', height: '100px' }}
         >
-          <Text style={{
+          <View style={{
             width: '100px', height: '100px',
             backgroundColor: props.colorArray[i] ? props.colorArray[i][1] : '#eee'
-          }}></Text>
+          }}></View>
         </TouchableHighlight>
       ))
         :
-        <div style={{ backgroundColor: props.chosenColor[1], height: '100px', width: '100px' }}></div>
+        <View style={{ backgroundColor: props.chosenColor[1], height: '100px', width: '100px' }}></View>
       }
       <Card.Title>Which color is: {props.chosenColor[0]}</Card.Title>
     </Card>
