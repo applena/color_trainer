@@ -13,16 +13,16 @@ function GuessColorGame(props) {
           key={i}
           onClick={() => checkAnswer(props.colorArray[i])}
           onPress={() => checkAnswer(props.colorArray[i])}
-          style={{ width: '100px', height: '100px' }}
+          style={{ width: '50%', height: '30%' }}
         >
           <View style={{
-            width: '100px', height: '100px',
+            width: '50%', height: '30%',
             backgroundColor: props.colorArray[i] ? props.colorArray[i][1] : '#eee'
           }}></View>
         </TouchableHighlight>
       ))
         :
-        <View style={{ backgroundColor: props.chosenColor[1], height: '100px', width: '100px' }}></View>
+        <View style={{ backgroundColor: props.chosenColor[1], height: '30%', width: '50%' }}></View>
       }
       <Card.Title>Which color is: {props.chosenColor[0]}</Card.Title>
     </Card>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, ListItem } from 'react-native-elements';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { Text, TouchableHighlight } from 'react-native';
 
 function GuessNameGame(props) {
 
@@ -9,7 +9,7 @@ function GuessNameGame(props) {
   return (
     <Card>
       <Card.Title>What is the NAME of this COLOR</Card.Title>
-      <Text style={{ width: '100px', height: '100px', display: 'inline', alignItems: 'center', backgroundColor: props.chosenColor[1] ? props.chosenColor[1] : 'ff0000' }}></Text>
+      <Text style={{ width: '50%', height: '30%', alignItems: 'center', backgroundColor: props.chosenColor[1] ? props.chosenColor[1] : 'ff0000' }}></Text>
       {props.indexes.map(i => (
         <ListItem
           key={i}
@@ -22,7 +22,7 @@ function GuessNameGame(props) {
             onClick={() => checkAnswer(props.colorArray[i])}
             onPress={() => checkAnswer(props.colorArray[i])}
           >
-            <View>{props.colorArray[i] ? props.colorArray[i][0] : ""}</View>
+            <Text>{props.colorArray[i] ? props.colorArray[i][0] : ""}</Text>
           </TouchableHighlight>
         </ListItem>
       ))}
