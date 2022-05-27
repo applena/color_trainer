@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, ListItem } from 'react-native-elements';
-import { Text, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
 
 function GuessNameGame(props) {
 
@@ -21,9 +21,8 @@ function GuessNameGame(props) {
           <TouchableHighlight
             onClick={() => checkAnswer(props.colorArray[i])}
             onPress={() => checkAnswer(props.colorArray[i])}
-          // underlayColor={props.status === 'correct' ? '#00ff00' : props.status === 'incorrect' ? '#8e1600' : '#fff'}
           >
-            <Text>{props.colorArray[i] ? props.colorArray[i][0] : ""}</Text>
+            <View>{props.colorArray[i] ? props.colorArray[i][0] : ""}</View>
           </TouchableHighlight>
         </ListItem>
       ))}

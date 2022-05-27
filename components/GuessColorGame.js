@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-native-elements';
-import { Text, TouchableHighlight } from 'react-native';
+import { View, TouchableHighlight } from 'react-native';
 
 function GuessColorGame(props) {
 
