@@ -7,18 +7,20 @@ function GuessColorGame(props) {
   const checkAnswer = (arr) => props.checkAnswer(arr);
 
   return (
-    <Card containerStyle={{ display: 'flex' }}>
+    <Card containerStyle={{ display: 'flex', height: "100%" }}>
       {!props.status ? props.indexes.map(i => (
         <TouchableHighlight
           key={i}
           onClick={() => checkAnswer(props.colorArray[i])}
           onPress={() => checkAnswer(props.colorArray[i])}
-          style={{ width: '50%', height: '30%' }}
+          style={{ width: '50%', height: '100%' }}
         >
           <View style={{
             width: '50%', height: '30%',
             backgroundColor: props.colorArray[i] ? props.colorArray[i][1] : '#eee'
-          }}></View>
+          }}
+          >
+          </View>
         </TouchableHighlight>
       ))
         :
