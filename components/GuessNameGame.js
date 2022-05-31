@@ -1,15 +1,15 @@
 import React from 'react';
 import { Card, ListItem } from 'react-native-elements';
-import { Text, TouchableHighlight } from 'react-native';
+import { Text, TouchableHighlight, View } from 'react-native';
 
 function GuessNameGame(props) {
 
   const checkAnswer = (arr) => props.checkAnswer(arr);
 
   return (
-    <Card>
+    <Card containerStyle={{ display: 'flex', height: "100%" }}>
       <Card.Title>What is the NAME of this COLOR</Card.Title>
-      <Text style={{ width: '50%', height: '30%', alignItems: 'center', backgroundColor: props.chosenColor[1] ? props.chosenColor[1] : 'ff0000' }}></Text>
+      <View style={{ width: '50%', height: '50%', alignItems: 'center', backgroundColor: props.chosenColor[1] ? props.chosenColor[1] : 'ff0000' }}></View>
       {props.indexes.map(i => (
         <ListItem
           key={i}
