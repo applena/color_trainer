@@ -16,7 +16,7 @@ function GuessColorGame(props) {
           style={{ width: '50%', height: '100%' }}
         >
           <View style={{
-            width: '50%', height: '80%',
+            width: '50%', height: '30%',
             backgroundColor: props.colorArray[i] ? props.colorArray[i][1] : '#eee'
           }}
           >
