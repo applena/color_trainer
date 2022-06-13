@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, ListItem } from 'react-native-elements';
-import { Text, TouchableHighlight, View } from 'react-native';
+import { Text, View, Button } from 'react-native';
+import { color } from 'react-native-elements/dist/helpers';
 
 function GuessNameGame(props) {
 
@@ -18,18 +19,21 @@ function GuessNameGame(props) {
         }}
       ></View>
       {props.indexes.map(i => (
-        <TouchableHighlight
+        <Button
           onClick={() => checkAnswer(props.colorArray[i])}
           onPress={() => checkAnswer(props.colorArray[i])}
-          style={{
-            borderRadius: '10px',
-            borderWidth: 'medium',
-            borderColor: '#eee',
-            overflow: "hidden"
-          }}
+          title={props.colorArray[i] ? props.colorArray[i][0] : ""}
+          color={props.status === false ? '#3a3b3c' : props.chosenColor[1] === props.colorArray[i][1] ? '#2e8bc0' : '#a9a9a9'}
+          // style={{
+          //   borderRadius: '10px',
+          //   borderWidth: 'medium',
+          //   borderColor: '#eee',
+          //   overflow: "hidden",
+          //   backgroundColor: 'red'
+          // }}
           key={i}
         >
-          <ListItem
+          {/* <ListItem
             containerStyle={{
               backgroundColor: props.status === false ? '#fff' : props.chosenColor[1] === props.colorArray[i][1] ? '#2e8bc0' : '#eee',
               cursor: 'pointer',
@@ -37,8 +41,8 @@ function GuessNameGame(props) {
             }}
           >
             <Text>{props.colorArray[i] ? props.colorArray[i][0] : ""}</Text>
-          </ListItem>
-        </TouchableHighlight>
+          </ListItem> */}
+        </Button>
       ))}
     </Card>
   )
