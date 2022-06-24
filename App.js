@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import colorsAF from './assets/colorsAF.json';
 import colorsGM from './assets/colorsGM.json';
 import colorsNZ from './assets/colorsNZ.json';
+import pantoneColors from './assets/pantoneColors.json';
 import { Card } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropdownLevelPicker from './components/DropdownLevelPicker';
@@ -11,7 +12,8 @@ import GuessColorGame from './components/GuessColorGame';
 import GuessNameGame from './components/GuessNameGame';
 
 export default function App() {
-  const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
+  // const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
+  const allColors = [pantoneColors];
   const [colorArray, setColorArray] = useState([...colorsAF, ...colorsGM, ...colorsNZ]);
   const [indexes, setIndexes] = useState([]);
   const [chosenColor, setChosenColor] = useState([]);
