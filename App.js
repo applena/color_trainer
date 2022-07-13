@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import colorsAF from './assets/colorsAF.json';
-import colorsGM from './assets/colorsGM.json';
-import colorsNZ from './assets/colorsNZ.json';
 import pantoneColors from './assets/pantoneColors.json';
 import { Card } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,10 +8,15 @@ import DropdownLevelPicker from './components/DropdownLevelPicker';
 import GuessColorGame from './components/GuessColorGame';
 import GuessNameGame from './components/GuessNameGame';
 
+let newPantoneColors = pantoneColors.map(color => color[0].split(","))
+newPantoneColors = newPantoneColors.map(color => [color[0], color[1].substring(0, 7)]);
+
 export default function App() {
+  console.log('APP')
+
   // const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
-  const allColors = [pantoneColors];
-  const [colorArray, setColorArray] = useState([...colorsAF, ...colorsGM, ...colorsNZ]);
+  const allColors = newPantoneColors;
+  const [colorArray, setColorArray] = useState(newPantoneColors);
   const [indexes, setIndexes] = useState([]);
   const [chosenColor, setChosenColor] = useState([]);
   const [displayColor, setDisplayColor] = useState(false);
@@ -23,16 +25,18 @@ export default function App() {
   const [status, setStatus] = useState(false);
 
   useEffect(() => {
+    console.log('in use effect')
     getNewColor();
     getScore();
   }, [])
 
   const getNewColor = (array = allColors) => {
-    // console.log('getNewColor', { array })
+    // console.log('getNewColor', array, array.length)
     setStatus(false);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
       let index = Math.floor(Math.random() * array.length);
+      // console.log('in the for loop with ', i, index)
       if (tempArray.includes(index)) { i--; continue; }
       tempArray.push(index);
     }
@@ -126,7 +130,8 @@ export default function App() {
           <Text>Train yourself to recognize the names of colors</Text>
           <Card>
             <Button
-              onClick={() => setGameMode(true)} onPress={() => setGameMode(true)}
+              // onClick={() => setGameMode(true)} 
+              onPress={() => setGameMode(true)}
               title='Choose the correct NAME'
             >
             </Button>
@@ -134,11 +139,11 @@ export default function App() {
 
           <Card>
             <Button
-              onClick={() => {
-                setGameMode(true);
-                setDisplayColor(true);
-              }
-              }
+              // onClick={() => {
+              //   setGameMode(true);
+              //   setDisplayColor(true);
+              // }
+              // }
               onPress={() => {
                 setGameMode(true);
                 setDisplayColor(true);
@@ -151,7 +156,8 @@ export default function App() {
         </View>
       }
 
-      {gameMode &&
+      {
+        gameMode &&
         <View>
           <Text>{status} Score: {score}</Text>
           <DropdownLevelPicker

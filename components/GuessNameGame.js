@@ -3,6 +3,7 @@ import { Card } from 'react-native-elements';
 import { View, Button } from 'react-native';
 
 function GuessNameGame(props) {
+  console.log(props)
 
   const checkAnswer = (arr) => props.checkAnswer(arr);
 
@@ -14,7 +15,7 @@ function GuessNameGame(props) {
           width: '100%',
           height: '60%',
           alignItems: 'center',
-          backgroundColor: props.chosenColor[1] ? props.chosenColor[1] : 'ff0000'
+          backgroundColor: props.chosenColor[1] ? props.chosenColor[1] : 'ff000'
         }}
       ></View>
       {props.indexes.map(i => (
