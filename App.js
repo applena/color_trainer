@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropdownLevelPicker from './components/DropdownLevelPicker';
 import GuessColorGame from './components/GuessColorGame';
 import GuessNameGame from './components/GuessNameGame';
+import Opening from './components/Opening';
 
 let newPantoneColors = pantoneColors.map(color => color[0].split(","))
 newPantoneColors = newPantoneColors.map(color => [color[0], color[1].substring(0, 7)]);
@@ -14,7 +15,6 @@ newPantoneColors = newPantoneColors.map(color => [color[0], color[1].substring(0
 export default function App() {
   console.log('APP')
 
-  // const allColors = [...colorsAF, ...colorsGM, ...colorsNZ];
   const allColors = newPantoneColors;
   const [colorArray, setColorArray] = useState(newPantoneColors);
   const [indexes, setIndexes] = useState([]);
@@ -23,15 +23,16 @@ export default function App() {
   const [gameMode, setGameMode] = useState(false);
   const [score, setScore] = useState(0);
   const [status, setStatus] = useState(false);
+  const [colorsReady, setColorsReady] = useState(false);
 
   useEffect(() => {
-    console.log('in use effect')
     getNewColor();
     getScore();
   }, [])
 
   const getNewColor = (array = allColors) => {
     // console.log('getNewColor', array, array.length)
+    setColorsReady(false);
     setStatus(false);
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
@@ -65,6 +66,7 @@ export default function App() {
     // console.log('chosen color', array[chosenColorIndex]);
     setChosenColor(array[chosenColorIndex]);
     setStatus(false);
+    setColorsReady(true);
   }
 
   const setExpertLevel = () => {
@@ -125,39 +127,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {!gameMode &&
-        <View>
-          <Text>Train yourself to recognize the names of colors</Text>
-          <Card>
-            <Button
-              // onClick={() => setGameMode(true)} 
-              onPress={() => setGameMode(true)}
-              title='Choose the correct NAME'
-            >
-            </Button>
-          </Card>
-
-          <Card>
-            <Button
-              // onClick={() => {
-              //   setGameMode(true);
-              //   setDisplayColor(true);
-              // }
-              // }
-              onPress={() => {
-                setGameMode(true);
-                setDisplayColor(true);
-              }
-              }
-              title="Choose the correct COLOR"
-            >
-            </Button>
-          </Card>
-        </View>
-      }
-
-      {
-        gameMode &&
+      {!gameMode ?
+        <Opening
+          setGameMode={setGameMode}
+          setDisplayColor={setDisplayColor}
+        />
+        :
+        colorsReady &&
         <View>
           <Text>{status} Score: {score}</Text>
           <DropdownLevelPicker
@@ -182,10 +158,6 @@ export default function App() {
           }
           <Card>
             <Button
-              onClick={() => {
-                displayColor ? setDisplayColor(false) : setDisplayColor(true);
-              }
-              }
               onPress={() => {
                 displayColor ? setDisplayColor(false) : setDisplayColor(true);
               }
