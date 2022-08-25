@@ -13,7 +13,7 @@ let newPantoneColors = pantoneColors.map(color => color[0].split(","))
 newPantoneColors = newPantoneColors.map(color => [color[0], color[1].substring(0, 7)]);
 
 export default function App() {
-  console.log('APP')
+  // console.log('APP')
 
   const allColors = newPantoneColors;
   const [colorArray, setColorArray] = useState(newPantoneColors);
@@ -136,9 +136,9 @@ export default function App() {
         colorsReady &&
         <View>
           <Text>{status} Score: {score}</Text>
-          <DropdownLevelPicker
+          {/* <DropdownLevelPicker
             setNewLevel={setNewLevel}
-          />
+          /> */}
           {displayColor ?
             <GuessColorGame
               indexes={indexes}
@@ -179,5 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
+    width: '100%'
   }
 });

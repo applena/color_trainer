@@ -16,9 +16,9 @@ function GuessColorGame(props) {
   });
 
   return (
-    <Card containerStyle={{ height: "60%" }}>
+    <Card containerStyle={{ height: "70%" }}>
       <View
-        style={{ height: '90%' }}
+        style={{ height: '90%', minWidth: '100%', overflow: 'scroll' }}
       >
         {!props.status ? props.indexes.map(i => (
           <TouchableHighlight
@@ -40,7 +40,6 @@ function GuessColorGame(props) {
         }
       </View>
       <Text style={styles.header}>{!props.status ? `Which color is: ${props.chosenColor[0]}` : `${props.chosenColor[0]}`}</Text>
-      {/* <Card.Title>{!props.status ? `Which color is: ${props.chosenColor[0]}` : `${props.chosenColor[0]}`}</Card.Title> */}
     </Card >
   )
 }

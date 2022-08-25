@@ -8,12 +8,12 @@ function GuessNameGame(props) {
   const checkAnswer = (arr) => props.checkAnswer(arr);
 
   return (
-    <Card containerStyle={{ display: 'flex', height: "70%" }}>
+    <Card containerStyle={{ display: 'flex', height: '60%', overflow: 'scroll' }}>
       <Card.Title>What is the NAME of this COLOR</Card.Title>
       <View
         style={{
           width: '100%',
-          height: '60%',
+          height: '70%',
           alignItems: 'center',
           backgroundColor: props.chosenColor[1] ? props.chosenColor[1] : 'ff000'
         }}
