@@ -28,8 +28,8 @@ export default function App() {
 
   useEffect(() => {
     getNewColor();
-    getScore();
-    getWrongGuesses();
+    getFromLS('score');
+    getFromLS('wrongGuesses');
   }, [])
 
   const getNewColor = (array = allColors) => {
@@ -97,66 +97,93 @@ export default function App() {
     if (answer[0] === chosenColor[0]) {
       let tempScore = score + 1;
       setScore(tempScore);
-      saveScore(tempScore);
+      saveToLS('score', tempScore);
       setStatus('correct');
 
-      console.log({ incorrectAnswers });
-      getWrongGuesses();
       const newIncorrectAnswers = incorrectAnswers.filter(answer => answer[0] !== chosenColor[0]);
-      console.log({ newIncorrectAnswers });
+      // console.log({ newIncorrectAnswers });
       setIncorrectAnswers(newIncorrectAnswers);
     } else {
       setStatus('incorrect');
-      const wrongGusses = [...incorrectAnswers, answer];
-      setIncorrectAnswers(wrongGusses);
-      saveWrongGuesses(wrongGusses);
+
+      const duplicateAnswer = incorrectAnswers.find(wrongAnswer => answer === wrongAnswer);
+
+      if (!duplicateAnswer) {
+        const wrongGusses = [...incorrectAnswers, chosenColor];
+        console.log({ wrongGusses })
+        setIncorrectAnswers(wrongGusses);
+        saveToLS('wrongGuesses', wrongGusses);
+      }
     }
     setTimeout(function () { getNewColor(colorArray); }, 2000);
   }
 
-  const saveScore = async (playerScore) => {
+  const saveToLS = async (key, value) => {
     try {
-      const stringScore = JSON.stringify(playerScore);
-      await AsyncStorage.setItem('score', stringScore);
-      // console.log('successfully stored score', stringScore)
+      const stringValue = JSON.stringify(value);
+      await AsyncStorage.setItem(key, stringValue);
+      console.log(`saving ${key} ${value} to LS`)
     } catch (e) {
-      console.error('ERROR saving score', e);
+      console.error('ERROR saving to LS', e);
     }
   }
 
-  const getScore = async () => {
+  const getFromLS = async (key) => {
     try {
-      const value = await AsyncStorage.getItem('score');
+      const value = await AsyncStorage.getItem(key);
       if (value !== null) {
-        let tempScore = JSON.parse(value);
-        setScore(tempScore);
+        let tempValue = JSON.parse(value);
+        if (key === 'score') setScore(tempValue);
+        if (key === 'wrongGuesses') setIncorrectAnswers(tempValue);
       }
     } catch (e) {
       console.error('ERROR getting score', e);
     }
   }
 
-  const saveWrongGuesses = async (wrongGuesses) => {
-    try {
-      const stringWrongGuess = JSON.stringify(wrongGuesses);
-      await AsyncStorage.setItem('wrongGuesses', stringWrongGuess);
-      console.log('successfully saved wrong gusses', stringWrongGuess);
-    } catch (e) {
-      console.error('ERROR saving incorrect guesses', e);
-    }
-  }
+  // const saveScore = async (playerScore) => {
+  //   try {
+  //     const stringScore = JSON.stringify(playerScore);
+  //     await AsyncStorage.setItem('score', stringScore);
+  //     // console.log('successfully stored score', stringScore)
+  //   } catch (e) {
+  //     console.error('ERROR saving score', e);
+  //   }
+  // }
 
-  const getWrongGuesses = async () => {
-    try {
-      const value = await AsyncStorage.getItem('wrongGuesses');
-      if (value !== null) {
-        let tempWrongGuesses = JSON.parse(value);
-        setIncorrectAnswers(tempWrongGuesses);
-      }
-    } catch (e) {
-      console.error('ERROR get guesses', e);
-    }
-  }
+  // const getScore = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('score');
+  //     if (value !== null) {
+  //       let tempScore = JSON.parse(value);
+  //       setScore(tempScore);
+  //     }
+  //   } catch (e) {
+  //     console.error('ERROR getting score', e);
+  //   }
+  // }
+
+  // const saveWrongGuesses = async (wrongGuesses) => {
+  //   try {
+  //     const stringWrongGuess = JSON.stringify(wrongGuesses);
+  //     await AsyncStorage.setItem('wrongGuesses', stringWrongGuess);
+  //     console.log('successfully saved wrong gusses', stringWrongGuess);
+  //   } catch (e) {
+  //     console.error('ERROR saving incorrect guesses', e);
+  //   }
+  // }
+
+  // const getWrongGuesses = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('wrongGuesses');
+  //     if (value !== null) {
+  //       let tempWrongGuesses = JSON.parse(value);
+  //       setIncorrectAnswers(tempWrongGuesses);
+  //     }
+  //   } catch (e) {
+  //     console.error('ERROR get guesses', e);
+  //   }
+  // }
 
   return (
     <View style={styles.container}>

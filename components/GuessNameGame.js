@@ -3,7 +3,7 @@ import { Card } from 'react-native-elements';
 import { View, Button } from 'react-native';
 
 function GuessNameGame(props) {
-  console.log(props)
+  // console.log(props)
 
   const checkAnswer = (arr) => props.checkAnswer(arr);
 
