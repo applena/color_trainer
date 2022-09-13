@@ -24,10 +24,12 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [status, setStatus] = useState(false);
   const [colorsReady, setColorsReady] = useState(false);
+  const [incorrectAnswers, setIncorrectAnswers] = useState([]);
 
   useEffect(() => {
     getNewColor();
     getScore();
+    getWrongGuesses();
   }, [])
 
   const getNewColor = (array = allColors) => {
@@ -97,8 +99,17 @@ export default function App() {
       setScore(tempScore);
       saveScore(tempScore);
       setStatus('correct');
+
+      console.log({ incorrectAnswers });
+      getWrongGuesses();
+      const newIncorrectAnswers = incorrectAnswers.filter(answer => answer[0] !== chosenColor[0]);
+      console.log({ newIncorrectAnswers });
+      setIncorrectAnswers(newIncorrectAnswers);
     } else {
       setStatus('incorrect');
+      const wrongGusses = [...incorrectAnswers, answer];
+      setIncorrectAnswers(wrongGusses);
+      saveWrongGuesses(wrongGusses);
     }
     setTimeout(function () { getNewColor(colorArray); }, 2000);
   }
@@ -107,7 +118,7 @@ export default function App() {
     try {
       const stringScore = JSON.stringify(playerScore);
       await AsyncStorage.setItem('score', stringScore);
-      console.log('successfully stored score', stringScore)
+      // console.log('successfully stored score', stringScore)
     } catch (e) {
       console.error('ERROR saving score', e);
     }
@@ -115,13 +126,35 @@ export default function App() {
 
   const getScore = async () => {
     try {
-      const value = await AsyncStorage.getItem('score')
+      const value = await AsyncStorage.getItem('score');
       if (value !== null) {
         let tempScore = JSON.parse(value);
         setScore(tempScore);
       }
     } catch (e) {
       console.error('ERROR getting score', e);
+    }
+  }
+
+  const saveWrongGuesses = async (wrongGuesses) => {
+    try {
+      const stringWrongGuess = JSON.stringify(wrongGuesses);
+      await AsyncStorage.setItem('wrongGuesses', stringWrongGuess);
+      console.log('successfully saved wrong gusses', stringWrongGuess);
+    } catch (e) {
+      console.error('ERROR saving incorrect guesses', e);
+    }
+  }
+
+  const getWrongGuesses = async () => {
+    try {
+      const value = await AsyncStorage.getItem('wrongGuesses');
+      if (value !== null) {
+        let tempWrongGuesses = JSON.parse(value);
+        setIncorrectAnswers(tempWrongGuesses);
+      }
+    } catch (e) {
+      console.error('ERROR get guesses', e);
     }
   }
 
