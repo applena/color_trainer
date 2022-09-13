@@ -25,6 +25,7 @@ export default function App() {
   const [status, setStatus] = useState(false);
   const [colorsReady, setColorsReady] = useState(false);
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
+  const [mistakeMode, setMistakeMode] = useState(false);
 
   useEffect(() => {
     getNewColor();
@@ -39,7 +40,6 @@ export default function App() {
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
       let index = Math.floor(Math.random() * array.length);
-      // console.log('in the for loop with ', i, index)
       if (tempArray.includes(index)) { i--; continue; }
       tempArray.push(index);
     }
@@ -118,6 +118,12 @@ export default function App() {
     setTimeout(function () { getNewColor(colorArray); }, 2000);
   }
 
+  const displayMissedColors = () => {
+    setColorArray(incorrectAnswers);
+    getNewColor(incorrectAnswers);
+    setMistakeMode(true);
+  }
+
   const saveToLS = async (key, value) => {
     try {
       const stringValue = JSON.stringify(value);
@@ -141,50 +147,6 @@ export default function App() {
     }
   }
 
-  // const saveScore = async (playerScore) => {
-  //   try {
-  //     const stringScore = JSON.stringify(playerScore);
-  //     await AsyncStorage.setItem('score', stringScore);
-  //     // console.log('successfully stored score', stringScore)
-  //   } catch (e) {
-  //     console.error('ERROR saving score', e);
-  //   }
-  // }
-
-  // const getScore = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem('score');
-  //     if (value !== null) {
-  //       let tempScore = JSON.parse(value);
-  //       setScore(tempScore);
-  //     }
-  //   } catch (e) {
-  //     console.error('ERROR getting score', e);
-  //   }
-  // }
-
-  // const saveWrongGuesses = async (wrongGuesses) => {
-  //   try {
-  //     const stringWrongGuess = JSON.stringify(wrongGuesses);
-  //     await AsyncStorage.setItem('wrongGuesses', stringWrongGuess);
-  //     console.log('successfully saved wrong gusses', stringWrongGuess);
-  //   } catch (e) {
-  //     console.error('ERROR saving incorrect guesses', e);
-  //   }
-  // }
-
-  // const getWrongGuesses = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem('wrongGuesses');
-  //     if (value !== null) {
-  //       let tempWrongGuesses = JSON.parse(value);
-  //       setIncorrectAnswers(tempWrongGuesses);
-  //     }
-  //   } catch (e) {
-  //     console.error('ERROR get guesses', e);
-  //   }
-  // }
-
   return (
     <View style={styles.container}>
       {!gameMode ?
@@ -195,10 +157,17 @@ export default function App() {
         :
         colorsReady &&
         <View>
-          <Text>{status} Score: {score}</Text>
-          {/* <DropdownLevelPicker
+          <View style={{ display: 'felx', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text>{status} Score: {score}</Text>
+            {!mistakeMode ?
+              <Text onPress={displayMissedColors}>Review Mistakes</Text>
+              :
+              <Text onPress={() => { getNewColor(); setMistakeMode(false) }}>View All Colors</Text>
+            }
+            {/* <DropdownLevelPicker
             setNewLevel={setNewLevel}
           /> */}
+          </View>
           {displayColor ?
             <GuessColorGame
               indexes={indexes}
