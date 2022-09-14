@@ -45,6 +45,7 @@ export default function App() {
     }
     setIndexes(tempArray);
 
+    // console.log({ tempArray })
     const pickedColors = tempArray.map(index => {
       return array[index];
     })
@@ -52,14 +53,6 @@ export default function App() {
     // console.log({ pickedColors })
 
     pickChosenColor(pickedColors);
-  }
-
-  const setNewLevel = (level) => {
-    if (level === 'Expert') {
-      setExpertLevel();
-    } else {
-      getNewColor(colorArray);
-    }
   }
 
   const pickChosenColor = (array) => {
@@ -71,29 +64,8 @@ export default function App() {
     setColorsReady(true);
   }
 
-  const setExpertLevel = () => {
-    const sortedArray = allColors.sort((a, b) => a[2] > b[2] ? 1 : -1);
-    const groupedSortedArray = [];
-    let counter = 0;
-    let tempArr = [];
-
-    // group colors in shades of 50
-    sortedArray.forEach(color => {
-      tempArr.push(color);
-      counter++;
-      if (counter === 50) {
-        groupedSortedArray.push(tempArr);
-        counter = 0;
-        tempArr = [];
-      }
-    })
-
-    let index = Math.floor(Math.random() * groupedSortedArray.length);
-    setColorArray(groupedSortedArray[index]);
-    getNewColor(groupedSortedArray[index]);
-  }
-
   const checkAnswer = (answer) => {
+    if (!answer) return;
     if (answer[0] === chosenColor[0]) {
       let tempScore = score + 1;
       setScore(tempScore);
@@ -162,7 +134,7 @@ export default function App() {
             {!mistakeMode ?
               <Text onPress={displayMissedColors}>Review Mistakes</Text>
               :
-              <Text onPress={() => { getNewColor(); setMistakeMode(false) }}>View All Colors</Text>
+              <Text onPress={() => { getNewColor(); setMistakeMode(false); setColorArray(newPantoneColors) }}>View All Colors</Text>
             }
             {/* <DropdownLevelPicker
             setNewLevel={setNewLevel}
