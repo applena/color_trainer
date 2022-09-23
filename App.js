@@ -26,46 +26,62 @@ export default function App() {
   const [colorsReady, setColorsReady] = useState(false);
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
   const [mistakeMode, setMistakeMode] = useState(false);
+  const [mistakes, setMistakes] = useState('no mistakes so far!');
 
   useEffect(() => {
     getNewColor();
     getFromLS('score');
-    getFromLS('wrongGuesses');
+    const misses = getFromLS('wrongGuesses');
+    !misses ? setMistakes('no mistakes so far!') : setMistakes('Reivew Mistakes');
   }, [])
 
   const getNewColor = (array = allColors) => {
-    // console.log('getNewColor', array, array.length)
+    console.log('getNewColor', array, array.length)
     setColorsReady(false);
     setStatus(false);
+
     let tempArray = [];
     for (let i = 0; i < 4; i++) {
       let index = Math.floor(Math.random() * array.length);
       if (tempArray.includes(index)) { i--; continue; }
       tempArray.push(index);
     }
+
+    if (!mistakeMode) {
+
+      const pickedColors = tempArray.map(index => {
+        return array[index];
+      })
+      // console.log({ pickedColors })
+
+      pickChosenColor(pickedColors);
+    } else {
+      tempArray.pop();
+      tempArray.push(pickChosenColor(array));
+    }
+
     setIndexes(tempArray);
-
     // console.log({ tempArray })
-    const pickedColors = tempArray.map(index => {
-      return array[index];
-    })
-
-    // console.log({ pickedColors })
-
-    pickChosenColor(pickedColors);
   }
 
   const pickChosenColor = (array) => {
-    // console.log('in pickChosenColor', array)
+    console.log('in pickChosenColor', array)
     let chosenColorIndex = Math.floor(Math.random() * array.length);
     // console.log('chosen color', array[chosenColorIndex]);
+
     setChosenColor(array[chosenColorIndex]);
     setStatus(false);
     setColorsReady(true);
+
+    return array[chosenColorIndex];
   }
 
   const checkAnswer = (answer) => {
     if (!answer) return;
+    console.log({ answer, chosenColor })
+    const duplicateAnswer = incorrectAnswers.find(wrongAnswer => answer === wrongAnswer);
+
+    // if answer is correct
     if (answer[0] === chosenColor[0]) {
       let tempScore = score + 1;
       setScore(tempScore);
@@ -73,12 +89,20 @@ export default function App() {
       setStatus('correct');
 
       const newIncorrectAnswers = incorrectAnswers.filter(answer => answer[0] !== chosenColor[0]);
-      // console.log({ newIncorrectAnswers });
-      setIncorrectAnswers(newIncorrectAnswers);
+
+      console.log('correct answer', { newIncorrectAnswers, incorrectAnswers });
+
+      // remove duplicate answers from our inocrrect array
+      duplicateAnswer ? setIncorrectAnswers(newIncorrectAnswers) : '';
+
+      // update the colorarray
+      mistakeMode ? setColorArray(newIncorrectAnswers) : setColorArray(newPantoneColors);
+
     } else {
+      // if answer is incorrect
       setStatus('incorrect');
 
-      const duplicateAnswer = incorrectAnswers.find(wrongAnswer => answer === wrongAnswer);
+      !mistakeMode ? setMistakes('Reivew Mistakes') : setMistakes('view all colors');
 
       if (!duplicateAnswer) {
         const wrongGusses = [...incorrectAnswers, chosenColor];
@@ -91,16 +115,24 @@ export default function App() {
   }
 
   const displayMissedColors = () => {
+    console.log({ incorrectAnswers })
+    if (!incorrectAnswers.length) { setMistakes('no mistakes yet'); return; }
     setColorArray(incorrectAnswers);
     getNewColor(incorrectAnswers);
     setMistakeMode(true);
+  }
+
+  const displayAllColors = () => {
+    getNewColor();
+    setMistakeMode(false);
+    setColorArray(newPantoneColors);
   }
 
   const saveToLS = async (key, value) => {
     try {
       const stringValue = JSON.stringify(value);
       await AsyncStorage.setItem(key, stringValue);
-      console.log(`saving ${key} ${value} to LS`)
+      // console.log(`saving ${key} ${value} to LS`)
     } catch (e) {
       console.error('ERROR saving to LS', e);
     }
@@ -114,6 +146,7 @@ export default function App() {
         if (key === 'score') setScore(tempValue);
         if (key === 'wrongGuesses') setIncorrectAnswers(tempValue);
       }
+      return value;
     } catch (e) {
       console.error('ERROR getting score', e);
     }
@@ -132,13 +165,10 @@ export default function App() {
           <View style={{ display: 'felx', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text>{status} Score: {score}</Text>
             {!mistakeMode ?
-              <Text onPress={displayMissedColors}>Review Mistakes</Text>
+              <Text onPress={displayMissedColors}>{mistakes}</Text>
               :
-              <Text onPress={() => { getNewColor(); setMistakeMode(false); setColorArray(newPantoneColors) }}>View All Colors</Text>
+              <Text onPress={displayAllColors}>View All Colors</Text>
             }
-            {/* <DropdownLevelPicker
-            setNewLevel={setNewLevel}
-          /> */}
           </View>
           {displayColor ?
             <GuessColorGame
